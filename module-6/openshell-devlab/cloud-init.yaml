@@ -1,0 +1,14 @@
+#cloud-config
+# Installs Docker, rsync, jq and the nebius CLI. SSH_PUBLIC_KEY is substituted by create-vm.sh.
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: [docker]
+    ssh_authorized_keys: ["SSH_PUBLIC_KEY"]
+package_update: true
+packages: [docker.io, docker-buildx, rsync, jq, curl]
+runcmd:
+  - systemctl enable --now docker
+  - usermod -aG docker ubuntu
+  - su - ubuntu -c 'curl -sSL https://storage.eu-west2.nebius.cloud/cli/install.sh | bash'

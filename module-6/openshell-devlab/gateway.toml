@@ -1,0 +1,35 @@
+[openshell]
+version = 2
+
+[openshell.gateway]
+name = "devlab"
+bind_address = "127.0.0.1:17670"
+health_bind_address = "127.0.0.1:17671"
+compute_driver = "docker"
+guest_tls_ca = "/workspace/.openshell/tls/ca.crt"
+guest_tls_cert = "/workspace/.openshell/tls/client/tls.crt"
+guest_tls_key = "/workspace/.openshell/tls/client/tls.key"
+
+[openshell.gateway.tls]
+cert_path = "/workspace/.openshell/tls/server/tls.crt"
+key_path = "/workspace/.openshell/tls/server/tls.key"
+client_ca_path = "/workspace/.openshell/tls/ca.crt"
+
+[openshell.gateway.mtls_auth]
+enabled = true
+
+[openshell.gateway.gateway_jwt]
+signing_key_path = "/workspace/.openshell/tls/jwt/signing.pem"
+public_key_path = "/workspace/.openshell/tls/jwt/public.pem"
+kid_path = "/workspace/.openshell/tls/jwt/kid"
+
+[openshell.drivers.docker]
+socket_path = "/run/openshell-docker.sock"
+grpc_endpoint = "https://127.0.0.1:17670"
+# Only the trusted supervisor shares this container's network namespace.
+# The research workload has no direct network interface.
+sandbox_runtime_image = "ghcr.io/nvidia/openshell/sandbox:0.1.1@sha256:48bb1deb5c0cd9f7c5c123a9559e469ce046e700e1099f5f4362178108306c0b"
+supervisor_image = "ghcr.io/nvidia/openshell/supervisor:0.1.1@sha256:297b4b681e13a4dccda4b4796e155e2231134aae1f9e3c94aba5bb981c0e1240"
+image_pull_policy = "if_not_present"
+enable_bind_mounts = false
+app_armor_profile = "Unconfined"

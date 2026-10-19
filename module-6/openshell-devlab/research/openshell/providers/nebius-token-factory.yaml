@@ -1,0 +1,19 @@
+id: course-nebius-token-factory
+display_name: Nebius Token Factory (course)
+description: Endpoint-bound Nebius credential for the DeepResearch sandbox
+category: inference
+inference_capable: true
+
+credentials:
+  - name: api_key
+    description: Nebius Token Factory API key
+    env_vars: [TOFA_API_KEY]
+    required: true
+    auth_style: bearer
+    header_name: authorization
+
+discovery:
+  credentials: [api_key]
+
+# This profile is intentionally endpointless. The sandbox policy binds this
+# concrete provider to exactly POST /v1/chat/completions.

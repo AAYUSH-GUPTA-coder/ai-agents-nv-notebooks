@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1
+
+FROM ghcr.io/astral-sh/uv:0.12.5@sha256:e85be844203885286c60ffad8a858d48afb6c5a5c237ca0e67f12e74b8f174b1 AS uv
+FROM python:3.12-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+
+# iproute2 is required by OpenShell's network namespace setup. curl is kept in
+# the image solely for the policy-impact demo in openshell/run.py.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        iproute2 \
+        nftables \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=uv /uv /uvx /usr/local/bin/
+
+RUN groupadd --gid 1500 sandbox \
+    && useradd --uid 1500 --gid sandbox --create-home sandbox \
+    && install -d -o sandbox -g sandbox /sandbox /sandbox/runs
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_CACHE_DIR=/tmp/uv-cache \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_NO_PROGRESS=1
+
+WORKDIR /sandbox
+
+# Resolve dependencies during the image build. Runtime policy deliberately
+# grants no package-index access. The lockfile pins the agent's Python dependencies.
+COPY --chown=sandbox:sandbox pyproject.toml uv.lock .python-version ./
+RUN uv sync --frozen --no-dev --no-install-project \
+    && uv cache clean \
+    && install -d -o sandbox -g sandbox "$UV_CACHE_DIR"
+
+COPY --chown=sandbox:sandbox \
+    agents.py main.py models.py prompts.py search_policy.py tools.py THIRD_PARTY_NOTICES.md ./
+
+USER sandbox:sandbox
+
+# OpenShell replaces the OCI command. This remains useful when testing the
+# image directly and documents the intended uv-based entrypoint.
+CMD ["uv", "run", "--frozen", "--no-sync", "python", "main.py"]
