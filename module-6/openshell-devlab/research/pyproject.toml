@@ -1,0 +1,13 @@
+[project]
+name = "nebius-deep-research-agent"
+version = "0.1.0"
+description = "A multi-agent competitor research workflow running in NVIDIA OpenShell"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "deepagents",
+    "langchain-nebius",
+    "tavily-python",
+]
+
+[tool.uv]
+package = false

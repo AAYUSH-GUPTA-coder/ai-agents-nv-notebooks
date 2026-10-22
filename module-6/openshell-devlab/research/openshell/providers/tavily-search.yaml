@@ -1,0 +1,19 @@
+id: course-tavily-search
+display_name: Tavily Search (course)
+description: Endpoint-bound Tavily credential for the DeepResearch sandbox
+category: knowledge
+inference_capable: false
+
+credentials:
+  - name: api_key
+    description: Tavily Search API key
+    env_vars: [TAVILY_API_KEY]
+    required: true
+    auth_style: bearer
+    header_name: authorization
+
+discovery:
+  credentials: [api_key]
+
+# This profile is intentionally endpointless. The sandbox policy binds this
+# concrete provider to exactly POST /search.
