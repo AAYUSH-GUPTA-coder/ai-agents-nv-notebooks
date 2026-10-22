@@ -1,9 +1,0 @@
-**/__pycache__
-**/*.pyc
-**/.env
-**/.venv
-**/runs
-**/test_*.py
-*.md
-*.sh
-demo.env

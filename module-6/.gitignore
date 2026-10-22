@@ -1,9 +1,0 @@
-__pycache__/
-.ipynb_checkpoints/
-.DS_Store
-.env
-*.pem
-credentials.json
-demo.env
-push.log
-sa-public.pem
