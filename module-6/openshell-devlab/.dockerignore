@@ -6,4 +6,4 @@
 **/test_*.py
 *.md
 *.sh
-cloud-init.yaml
+demo.env

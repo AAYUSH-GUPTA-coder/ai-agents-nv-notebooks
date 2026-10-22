@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Step 3 (run ON THE VM): create the registry, log in, build and push.
-# Usage: PROJECT_ID=project-... TAG=0.1.1-1 ./registry-build-push.sh
+# Run ON THE VM: create the registry, log in, build and push.
+# Usage: PROJECT_ID=project-... TAG=0.1.1-1 [REGISTRY_FQDN=cr.<region>.nebius.cloud] ./registry-build-push.sh
 set -euo pipefail
 cd "$(dirname "$0")"
 export PATH="$HOME/.nebius/bin:$PATH"
