@@ -41,8 +41,7 @@ cr.<region>.nebius.cloud/<registry-id without "registry-">/openshell-devlab@sha2
 | Field | Value |
 |---|---|
 | Image | reference from step 2 |
-| Container port / primary route port | `8888` / `8888` |
-| Workspace path | `/workspace` |
+| Ports (HTTP) | `8888` |
 | Platform / preset / disk | `cpu-d3` / `4vcpu-16gb` / 100 GiB or more |
 | Public endpoint | on |
 
@@ -63,7 +62,7 @@ Jupyter URL: `<public endpoint>/?token=<JUPYTER_TOKEN>`.
 nebius ai devlab logs <devlab-id> --tail 50
 ```
 
-- `no healthy upstream`: nothing listens on the routed port; check the logs and port `8888`.
+- `no healthy upstream`: nothing listens on the HTTP port; check the logs and that Ports (HTTP) is `8888`.
 - Healthy start: logs contain `OpenShell runtime is ready` and JupyterLab lines.
 - Test the image on the VM: `docker run --privileged -p 8888:8888 -e JUPYTER_TOKEN=... <image-reference>`
   (needs nested Docker and Landlock, so it will not start on Docker Desktop for macOS).
